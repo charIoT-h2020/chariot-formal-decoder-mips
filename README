@@ -1,0 +1,4 @@
+This package contains:
+  - Mipsdecoder: an MIPSv7 decoder for BINSEC::DBA translation
+  - GenISSLib (will not be installed): an instruction set simulator generator
+See INSTALL for installation instructions.

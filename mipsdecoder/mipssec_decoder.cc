@@ -200,7 +200,8 @@ namespace
     unisim::util::forbint::contract::MemoryState memstate(memory, memory_functions, parameters);
     DomainEvaluationEnvironment env;
     memstate.setEvaluationEnvironment(env);
-    insn->next_addresses(addresses, memstate, &proc->dftable);
+    if (!insn->next_addresses(addresses, memstate, &proc->dftable))
+      return false;
 
     // realloc target_addresses to the needed size
     for (int needed = addresses.size(); target_addresses->addresses_array_size < needed;)
@@ -212,6 +213,9 @@ namespace
     
     target_addresses->addresses_length = addresses.size();
     std::copy(addresses.begin(), addresses.end(), &target_addresses->addresses[0] );
+    // update the memory if addresses.size() == 1
+    if (addresses.size() == 1)
+       insn->interpret(address, *addresses.begin(), memstate, &proc->dftable);
     
     return true;
   }

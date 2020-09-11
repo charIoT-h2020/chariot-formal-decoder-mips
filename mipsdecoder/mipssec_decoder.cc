@@ -167,7 +167,7 @@ namespace
   void mips_filter_decision_vector(struct _DecisionVector* decision_vector, uint64_t target)
   {
     // No decision vector used for now...
-    struct TODO {}; throw TODO();
+    // struct TODO {}; throw TODO();
     // auto* decisionVector = reinterpret_cast<DecisionVector*>(decision_vector);
     // decisionVector->setToLastInstruction();
     // decisionVector->filter(target);
@@ -214,8 +214,9 @@ namespace
     target_addresses->addresses_length = addresses.size();
     std::copy(addresses.begin(), addresses.end(), &target_addresses->addresses[0] );
     // update the memory if addresses.size() == 1
+    uint32_t addr = address;
     if (addresses.size() == 1)
-       insn->interpret(address, *addresses.begin(), memstate, &proc->dftable);
+       insn->interpret(addr, *addresses.begin(), memstate, &proc->dftable);
     
     return true;
   }
@@ -234,9 +235,9 @@ namespace
     unisim::util::forbint::contract::MemoryState memstate(memory, memory_functions, parameters);
     DomainEvaluationEnvironment env;
     memstate.setEvaluationEnvironment(env);
-    insn->interpret(addr, target_address, memstate, &proc->dftable);
-
-    return true;
+    bool result = insn->interpret(addr, target_address, memstate, &proc->dftable);
+    *address = unisim::util::endian::Host2LittleEndian(addr);
+    return result;
   }
 
 }
